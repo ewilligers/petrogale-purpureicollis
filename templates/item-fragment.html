@@ -1,0 +1,79 @@
+  <div id="item{{ item.number }}_heading">
+    <span class="heading">item{{ item.number }}</span>
+    <label for="item{{ item.number }}_display">display</label>
+    <select id="item{{ item.number }}_display" name="item{{ item.number }}_display" onchange="updateItemDisplay('item{{ item.number }}_display', 'item{{ item.number }}_specification')">
+      {% if item.display == 'none' %}
+        <option value="none" selected>none</option>
+        <option value="block">block</option>
+      {% else %}
+        <option value="none">none</option>
+        <option value="block" selected>block</option>
+      {% endif %}
+    </select>
+  </div>
+  <div id="item{{ item.number }}_specification" style="display: {{ item.display }};">
+    <div>
+      <label for="item{{ item.number }}_width">width</label>
+      <input id="item{{ item.number }}_width" name="item{{ item.number }}_width" type="number" value="10"></input>
+      <label for="item{{ item.number }}_width">%</label>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_height">height</label>
+      <input id="item{{ item.number }}_height" name="item{{ item.number }}_height" type="number" value="10"></input>
+      <label for="item{{ item.number }}_height">%</label>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_background">background-color</label>
+      <input id="item{{ item.number }}_background" name="item{{ item.number }}_background" type="color" value="#8080FF"></input>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_position_x">offset-position</label>
+      <input id="item{{ item.number }}_position_x" name="item{{ item.number }}_position_x" type="number" value="50"></input>
+      <label for="item{{ item.number }}_position_x">%</label>
+      <input id="item{{ item.number }}_position_y" name="item{{ item.number }}_position_y" type="number" value="50"></input>
+      <label for="item{{ item.number }}_position_y">%</label>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_function">offset-path</label>
+      <select id="item{{ item.number }}_function" name="item{{ item.number }}_function">
+        <option value="ray" selected>ray</option>
+      </select>
+      <span id="item{{ item.number }}_ray_specification">
+        <label for="item{{ item.number }}_size">(</label>
+        <select id="item{{ item.number }}_size" name="item{{ item.number }}_size">
+          <option value="closest-side" selected>closest-side</option>
+          <option value="farthest-side">farthest-side</option>
+          <option value="closest-corner">closest-corner</option>
+          <option value="farthest-corner">farthest-corner</option>
+        </select>
+        <select id="item{{ item.number }}_contain" name="item{{ item.number }}_contain">
+          <option value="contain">contain</option>
+          <option value="" selected></option>
+        </select>
+        <input id="item{{ item.number }}_direction" name="item{{ item.number }}_direction" type="number" value="0"></input>
+        <label for="item{{ item.number }}_direction">deg)</label>
+      </span>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_distance">offset-distance</label>
+      <input id="item{{ item.number }}_distance" name="item{{ item.number }}_distance" type="number" value="100"></input>
+      <label for="item{{ item.number }}_distance">%</label>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_rotation_auto">offset-rotation</label>
+      <select id="item{{ item.number }}_rotation_auto" name="item{{ item.number }}_rotation_auto">
+        <option value="auto" selected>auto</option>
+        <option value=""></option>
+      </select>
+      <input id="item{{ item.number }}_rotation_angle" name="item{{ item.number }}_rotation_angle" type="number" value="0"></input>
+      <label for="item{{ item.number }}_rotation_angle">deg</label>
+    </div>
+    <div>
+      <label for="item{{ item.number }}_anchor_x">offset-anchor</label>
+      <input id="item{{ item.number }}_anchor_x" name="item{{ item.number }}_anchor_x" type="number" value="50"></input>
+      <label for="item{{ item.number }}_anchor_x">%</label>
+      <input id="item{{ item.number }}_anchor_y" name="item{{ item.number }}_anchor_y" type="number" value="50"></input>
+      <label for="item{{ item.number }}_anchor_y">%</label>
+    </div>
+    <br>
+  </div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>ray</title>
+    <style>
+      .heading {
+        font-size: 1.5em;
+        font-weight: bold
+      }
+      input { 
+        text-align: right; 
+      }
+    </style>
+    <script>
+      'use strict';
+      function updateItemDisplay(selectId, divId) {
+        var select = document.getElementById(selectId);
+        var div = document.getElementById(divId);
+        div.style.display = select.options[select.selectedIndex].value;
+      }
+
+      window.onload = function() {
+        updateItemDisplay('item1_display', 'item1_specification');
+        updateItemDisplay('item2_display', 'item2_specification');
+        updateItemDisplay('item3_display', 'item3_specification');
+        updateItemDisplay('item4_display', 'item4_specification');
+        updateItemDisplay('item5_display', 'item5_specification');
+        updateItemDisplay('item6_display', 'item6_specification');
+        updateItemDisplay('item7_display', 'item7_specification');
+        updateItemDisplay('item8_display', 'item8_specification');
+        updateItemDisplay('item9_display', 'item9_specification');
+      }
+    </script>
+  </head>
+  <body>
+    <form meth="GET" action="/ray/plot">
+      {% for item in items %}
+        {% autoescape false %}
+        {{ item }}
+        {% endautoescape %}
+      {% endfor %}
+      <input type="submit" value="Plot"></input>
+    </form>
+  </body>
+</html>
+{% endautoescape %}

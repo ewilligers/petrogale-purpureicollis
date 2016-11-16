@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>shorthand</title>
+    <style>
+      #error { color: red; }
+    </style>
+    <script>
+      window.onload = function() {
+        var error = document.getElementById('error');
+        if (error.textContent === '')
+          error.style.display = 'none';
+      }
+    </script>
+  </head>
+  <body>
+    <form meth="GET" action="/ray/shorthand/">
+      <table>
+        <tr>
+          <td><label for="offset_name">Name:</label></td>
+          <td><input id="offset_name" name="offset_name" readonly value="'offset'"></input></td>
+        </tr>
+        <tr>
+          <td><label for="offset_value">Value:<br></label></td>
+          <td><textarea id="offset_value" name="offset_value" rows="5" cols="90" placeholder="<offset-position> <offset-path> <offset-distance> <offset-rotation> / <offset-anchor>">{{ offset_value }}</textarea></td>
+        </tr>
+      </table>
+      <input type="submit" value="Expand"></input>
+    </form>
+    <section>
+      <br>
+      <div id="error">{{ error }}</div>
+      <br>
+      <div>
+        {% autoescape false %}
+        {{ response }}
+        {% endautoescape %}
+      </div>
+    </section>
+  </body>
+</html>
+{% endautoescape %}

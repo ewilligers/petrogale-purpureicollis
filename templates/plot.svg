@@ -1,0 +1,43 @@
+{% autoescape true %}<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ image_size.width }}" height="{{ image_size.height }}">
+    <style>
+        .boundary {
+            fill-opacity: 0;
+            stroke: #ccc;
+            stroke-width: 2;
+            stroke-dasharray: 5,3;
+        }
+        .label {
+            font-family: Verdana;
+            font-size: 25px;
+            fill: black;
+            stroke: black;
+        }
+        .ray {
+            stroke: cyan;
+            stroke-width: 3;
+            stroke-dasharray: 15,10;
+        }
+    </style>
+    <text class="label" x="{{ label_position.x }}" y="{{ label_position.y }}" id="label">containing block</text>
+    <line class="label" x1="{{ stroke_begin.x }}" y1="{{ stroke_begin.y }}" x2="{{ stroke_end.x }}" y2="{{ stroke_end.y }}" />
+    <rect class="boundary" x="{{ container_position.x - 1 }}" y="{{ container_position.y - 1 }}" width="{{ container_size.width + 2 }}" height="{{ container_size.height + 2 }}" />
+
+    {% for element in elements %}
+        <circle class="boundary" cx="{{ container_position.x + element.offset_position.x }}" cy="{{ container_position.y + element.offset_position.y }}" r="{{ element.path_length }}" />
+    {% endfor %}
+
+    {% for element in elements %}
+        <g transform="translate({{ container_position.x + element.offset_position.x }}, {{ container_position.y + element.offset_position.y }})">
+            <polygon class="placed" fill="{{ element.background_color }}"
+                     points="{{ element.v[0].x }},{{ element.v[0].y }}
+                             {{ element.v[1].x }},{{ element.v[1].y }}
+                             {{ element.v[2].x }},{{ element.v[2].y }}
+                             {{ element.v[3].x }},{{ element.v[3].y }}"
+                     transform="translate({{ element.translation.x }}, {{ element.translation.y }})"/>
+            <line class="ray" x1="0" y1="0"
+                              x2="{{ element.translation.x }}" y2="{{ element.translation.y }}" />
+        </g>
+    {% endfor %}
+</svg>
+{% endautoescape %}
