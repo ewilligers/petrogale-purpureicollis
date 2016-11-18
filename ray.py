@@ -45,7 +45,7 @@ def least_upper_bound(intervals):
     return min([interval.upper_bound for interval in intervals])
 
 
-class OffsetPath:
+class RayPath:
     def __init__(self, angle, size = None, contain = False):
         if size not in [
             'closest-side',
@@ -60,7 +60,7 @@ class OffsetPath:
         self.contain = contain
 
     def __str__(self):
-        return 'OffsetPath({}, {}, {})'.format(self.angle, self.size, self.contain)
+        return 'RayPath({}, {}, {})'.format(self.angle, self.size, self.contain)
 
 
 class OffsetRotation:
@@ -85,7 +85,7 @@ class Element:
         self.offset_anchor = offset_anchor
         self.container_size = container_size
 
-        if offset_rotation.auto:
+        if offset_path and offset_rotation.auto:
             rotation = offset_rotation.angle + (offset_path.angle - 90)
         else:
             rotation = offset_rotation.angle
@@ -97,28 +97,18 @@ class Element:
             Point(-offset_anchor.x,             size.height - offset_anchor.y)
         ])
 
-        self.path_length = self.compute_path_length()
-        self.computed_offset = self.compute_offset()
+        if offset_path:
+            self.path_length = self.compute_path_length()
+            self.computed_offset = self.compute_offset()
 
-        self.translation = Point(
-            self.computed_offset * sin(radians(self.offset_path.angle)),
-            -self.computed_offset * cos(radians(self.offset_path.angle))
-        )
+            self.translation = Point(
+                self.computed_offset * sin(radians(self.offset_path.angle)),
+                -self.computed_offset * cos(radians(self.offset_path.angle))
+            )
+        else:
+            self.path_length = 0
+            self.translation = Point(0, 0)
 
-        if False:
-            print(self.id)
-            print(self.size)
-            print(self.background_color)
-            print(self.offset_path)
-            print(self.offset_distance)
-            print(self.offset_rotation)
-            print(self.offset_position)
-            print(self.offset_anchor)
-            print(self.container_size)
-            print(self.v)
-            print(self.path_length)
-            print(self.computed_offset)
-            print(self.translation)
 
     def compute_path_length(self):
         x1 = fabs(self.offset_position.x)
@@ -227,25 +217,21 @@ class PlotPage(RequestHandler):
             distance = getFloatParam('distance', 100)
             rotation_auto = getParam('rotation_auto', '')
             rotation_angle = getFloatParam('rotation_angle', 0)
-            anchor_x = getFloatParam('anchor_x', 50)
-            anchor_y = getFloatParam('anchor_y', 50)
+            anchor = getParam('anchor', '')
+            if anchor == '':
+                anchor_x = getFloatParam('anchor_x', 50)
+                anchor_y = getFloatParam('anchor_y', 50)
+            elif path_function == 'none':
+                anchor_x = position_x
+                anchor_y = position_y
+            else:
+                anchor_x = 50
+                anchor_y = 50
 
-            if False:
-                print(display)
-                print(width)
-                print(height)
-                print(background_color)
-                print(position_x)
-                print(position_y)
-                print(path_function)
-                print(ray_size)
-                print(ray_contain)
-                print(ray_angle)
-                print(distance)
-                print(rotation_auto)
-                print(rotation_angle)
-                print(anchor_x)
-                print(anchor_y)
+            if path_function == 'ray':
+                offset_path = RayPath(ray_angle, ray_size, ray_contain == 'contain')
+            else:
+                offset_path = None
 
             if display == 'block':
                 element_size = Size(width * container_size.width / 100.0, height * container_size.height / 100.0)
@@ -253,7 +239,7 @@ class PlotPage(RequestHandler):
                     id = box,
                     size = element_size,
                     background_color = background_color,
-                    offset_path = OffsetPath(ray_angle, ray_size, ray_contain == 'contain'),
+                    offset_path = offset_path,
                     offset_distance = distance,
                     offset_rotation = OffsetRotation(rotation_auto == 'auto', rotation_angle),
                     offset_position = Point(position_x * container_size.width / 100.0, position_y * container_size.height / 100.0),

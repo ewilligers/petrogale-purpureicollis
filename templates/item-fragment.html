@@ -1,7 +1,7 @@
   <div id="item{{ item.number }}_heading">
     <span class="heading">item{{ item.number }}</span>
     <label for="item{{ item.number }}_display">display</label>
-    <select id="item{{ item.number }}_display" name="item{{ item.number }}_display" onchange="updateItemDisplay('item{{ item.number }}_display', 'item{{ item.number }}_specification')">
+    <select id="item{{ item.number }}_display" name="item{{ item.number }}_display" onchange="updateItemDisplay('item{{ item.number }}_display', 'item{{ item.number }}_specification', 'block');">
       {% if item.display == 'none' %}
         <option value="none" selected>none</option>
         <option value="block">block</option>
@@ -11,7 +11,7 @@
       {% endif %}
     </select>
   </div>
-  <div id="item{{ item.number }}_specification" style="display: {{ item.display }};">
+  <div id="item{{ item.number }}_specification">
     <div>
       <label for="item{{ item.number }}_width">width</label>
       <input id="item{{ item.number }}_width" name="item{{ item.number }}_width" type="number" value="10"></input>
@@ -35,8 +35,9 @@
     </div>
     <div>
       <label for="item{{ item.number }}_function">offset-path</label>
-      <select id="item{{ item.number }}_function" name="item{{ item.number }}_function">
+      <select id="item{{ item.number }}_function" name="item{{ item.number }}_function" onchange="updateItemDisplay('item{{ item.number }}_function', 'item{{ item.number }}_ray_specification', 'ray');">
         <option value="ray" selected>ray</option>
+        <option value="none">none</option>
       </select>
       <span id="item{{ item.number }}_ray_specification">
         <label for="item{{ item.number }}_size">(</label>
@@ -69,11 +70,22 @@
       <label for="item{{ item.number }}_rotation_angle">deg</label>
     </div>
     <div>
-      <label for="item{{ item.number }}_anchor_x">offset-anchor</label>
-      <input id="item{{ item.number }}_anchor_x" name="item{{ item.number }}_anchor_x" type="number" value="50"></input>
-      <label for="item{{ item.number }}_anchor_x">%</label>
-      <input id="item{{ item.number }}_anchor_y" name="item{{ item.number }}_anchor_y" type="number" value="50"></input>
-      <label for="item{{ item.number }}_anchor_y">%</label>
+      <label for="item{{ item.number }}_anchor">offset-anchor</label>
+      <select id="item{{ item.number }}_anchor" name="item{{ item.number }}_anchor" onchange="updateItemDisplay('item{{ item.number }}_anchor', 'item{{ item.number }}_anchor_specification', '');">
+        {% if item.anchor == 'auto' %}
+          <option value=""></option>
+          <option value="auto" selected>auto</option>
+        {% else %}
+          <option value="" selected></option>
+          <option value="auto">auto</option>
+        {% endif %}
+      </select>
+      <span id="item{{ item.number }}_anchor_specification">
+        <input id="item{{ item.number }}_anchor_x" name="item{{ item.number }}_anchor_x" type="number" value="50"></input>
+        <label for="item{{ item.number }}_anchor_x">%</label>
+        <input id="item{{ item.number }}_anchor_y" name="item{{ item.number }}_anchor_y" type="number" value="50"></input>
+        <label for="item{{ item.number }}_anchor_y">%</label>
+      </span>
     </div>
     <br>
   </div>
