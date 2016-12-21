@@ -72,12 +72,12 @@
     <div>
       <label for="item{{ item.number }}_anchor">offset-anchor</label>
       <select id="item{{ item.number }}_anchor" name="item{{ item.number }}_anchor" onchange="updateItemDisplay('item{{ item.number }}_anchor', 'item{{ item.number }}_anchor_specification', '');">
-        {% if item.anchor == 'auto' %}
-          <option value=""></option>
-          <option value="auto" selected>auto</option>
-        {% else %}
+        {% if item.anchor == '' %}
           <option value="" selected></option>
           <option value="auto">auto</option>
+        {% else %}
+          <option value=""></option>
+          <option value="auto" selected>auto</option>
         {% endif %}
       </select>
       <span id="item{{ item.number }}_anchor_specification">

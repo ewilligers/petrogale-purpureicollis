@@ -18,6 +18,10 @@
             stroke-width: 3;
             stroke-dasharray: 15,10;
         }
+        .crosshairs {
+            stroke: navy;
+            stroke-width: 2;
+        }
     </style>
     <text class="label" x="{{ label_position.x }}" y="{{ label_position.y }}" id="label">containing block</text>
     <line class="label" x1="{{ stroke_begin.x }}" y1="{{ stroke_begin.y }}" x2="{{ stroke_end.x }}" y2="{{ stroke_end.y }}" />
@@ -35,8 +39,15 @@
                              {{ element.v[2].x }},{{ element.v[2].y }}
                              {{ element.v[3].x }},{{ element.v[3].y }}"
                      transform="translate({{ element.translation.x }}, {{ element.translation.y }})"/>
-            <line class="ray" x1="0" y1="0"
-                              x2="{{ element.translation.x }}" y2="{{ element.translation.y }}" />
+            {% if element.offset_path %}
+                <line class="ray" x1="0" y1="0"
+                                  x2="{{ element.translation.x }}" y2="{{ element.translation.y }}" />
+            {% else %}
+                <line class="crosshairs" x1="-5" y1="0"
+                                         x2="5" y2="0" />
+                <line class="crosshairs" x1="0" y1="-5"
+                                         x2="0" y2="5" />
+            {% endif %}
         </g>
     {% endfor %}
 </svg>
