@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from jinja2 import Environment, FileSystemLoader
-from math import cos, fabs, radians, sin, sqrt
+from math import atan2, cos, degrees, fabs, radians, sin, sqrt
 from os import path
 from webapp2 import RequestHandler, WSGIApplication
 
@@ -58,9 +58,24 @@ class RayPath:
         self.angle = angle
         self.size = size
         self.contain = contain
+        self.is_ray = True
 
     def __str__(self):
         return 'RayPath({}, {}, {})'.format(self.angle, self.size, self.contain)
+
+
+class StringPath:
+    def __init__(self, path, x, y, dx, dy):
+        self.path = path
+        self.x = x
+        self.y = y
+        self.dx = dx
+        self.dy = dy
+        self.angle = 90 - degrees(atan2(-dy, dx))
+        self.is_ray = False
+
+    def __str__(self):
+        return 'StringPath({}, {}, {}, {}, {})'.format(self.path, self.x, self.y, self.dx, self.dy)
 
 
 class OffsetRotation:
@@ -97,7 +112,7 @@ class Element:
             Point(-offset_anchor.x,             size.height - offset_anchor.y)
         ])
 
-        if offset_path:
+        if isinstance(offset_path, RayPath):
             self.path_length = self.compute_path_length()
             self.computed_offset = self.compute_offset()
 
@@ -105,6 +120,9 @@ class Element:
                 self.computed_offset * sin(radians(self.offset_path.angle)),
                 -self.computed_offset * cos(radians(self.offset_path.angle))
             )
+        elif isinstance(offset_path, StringPath):
+            self.path_length = 0
+            self.translation = Point(self.offset_path.x, self.offset_path.y)
         else:
             self.path_length = 0
             self.translation = Point(0, 0)
@@ -183,6 +201,9 @@ class MainPage(RequestHandler):
 
 class PlotPage(RequestHandler):
     def get(self):
+        post(self)
+
+    def post(self):
         plot_template = JINJA_ENVIRONMENT.get_template('templates/plot.svg')
 
         image_size = Size(700, 700)
@@ -215,6 +236,11 @@ class PlotPage(RequestHandler):
             ray_contain = getParam('contain', 'unbounded')
             ray_angle = getFloatParam('direction', 90)
             distance = getFloatParam('distance', 100)
+            path = getParam('path', '')
+            path_x = getFloatParam('path_x', 0)
+            path_y = getFloatParam('path_y', 0)
+            path_dx = getFloatParam('path_dx', 0)
+            path_dy = getFloatParam('path_dy', 0)
             rotation_auto = getParam('rotation_auto', '')
             rotation_angle = getFloatParam('rotation_angle', 0)
             anchor = getParam('anchor', '')
@@ -230,6 +256,8 @@ class PlotPage(RequestHandler):
 
             if path_function == 'ray':
                 offset_path = RayPath(ray_angle, ray_size, ray_contain == 'contain')
+            elif path_function == 'path':
+                offset_path = StringPath(path, path_x, path_y, path_dx, path_dy)
             else:
                 offset_path = None
 

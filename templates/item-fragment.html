@@ -35,8 +35,9 @@
     </div>
     <div>
       <label for="item{{ item.number }}_function">offset-path</label>
-      <select id="item{{ item.number }}_function" name="item{{ item.number }}_function" onchange="updateItemDisplay('item{{ item.number }}_function', 'item{{ item.number }}_ray_specification', 'ray');">
+      <select id="item{{ item.number }}_function" name="item{{ item.number }}_function" onchange="updateItemDisplay('item{{ item.number }}_function', 'item{{ item.number }}_ray_specification', 'ray'); updateItemDisplay('item{{ item.number }}_function', 'item{{ item.number }}_path_specification', 'path');">
         <option value="ray" selected>ray</option>
+        <option value="path">path</option>
         <option value="none">none</option>
       </select>
       <span id="item{{ item.number }}_ray_specification">
@@ -54,10 +55,20 @@
         <input id="item{{ item.number }}_direction" name="item{{ item.number }}_direction" type="number" value="0"></input>
         <label for="item{{ item.number }}_direction">deg)</label>
       </span>
+      <span id="item{{ item.number }}_path_specification">
+        <label for="item{{ item.number }}_path">('</label>
+        <input id="item{{ item.number }}_path" name="item{{ item.number }}_path" type="text" value="" onchange="updateCoordinates('item{{ item.number }}');"></input>
+        <label for="item{{ item.number }}_path">')</label>
+
+        <input id="item{{ item.number }}_path_x" name="item{{ item.number }}_path_x" type="hidden"></input>
+        <input id="item{{ item.number }}_path_y" name="item{{ item.number }}_path_y" type="hidden"></input>
+        <input id="item{{ item.number }}_path_dx" name="item{{ item.number }}_path_dx" type="hidden"></input>
+        <input id="item{{ item.number }}_path_dy" name="item{{ item.number }}_path_dy" type="hidden"></input>
+      </span>
     </div>
     <div>
       <label for="item{{ item.number }}_distance">offset-distance</label>
-      <input id="item{{ item.number }}_distance" name="item{{ item.number }}_distance" type="number" value="100"></input>
+      <input id="item{{ item.number }}_distance" name="item{{ item.number }}_distance" type="number" value="100" onchange="updateCoordinates('item{{ item.number }}');"></input>
       <label for="item{{ item.number }}_distance">%</label>
     </div>
     <div>
