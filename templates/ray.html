@@ -64,33 +64,11 @@
       }
 
       window.onload = function() {
-        updateItemDisplay('item1_display', 'item1_specification', 'block');
-        updateItemDisplay('item2_display', 'item2_specification', 'block');
-        updateItemDisplay('item3_display', 'item3_specification', 'block');
-        updateItemDisplay('item4_display', 'item4_specification', 'block');
-        updateItemDisplay('item5_display', 'item5_specification', 'block');
-        updateItemDisplay('item6_display', 'item6_specification', 'block');
-
-        updateItemDisplay('item1_function', 'item1_ray_specification', 'ray');
-        updateItemDisplay('item2_function', 'item2_ray_specification', 'ray');
-        updateItemDisplay('item3_function', 'item3_ray_specification', 'ray');
-        updateItemDisplay('item4_function', 'item4_ray_specification', 'ray');
-        updateItemDisplay('item5_function', 'item5_ray_specification', 'ray');
-        updateItemDisplay('item6_function', 'item6_ray_specification', 'ray');
-
-        updateItemDisplay('item1_function', 'item1_path_specification', 'path');
-        updateItemDisplay('item2_function', 'item2_path_specification', 'path');
-        updateItemDisplay('item3_function', 'item3_path_specification', 'path');
-        updateItemDisplay('item4_function', 'item4_path_specification', 'path');
-        updateItemDisplay('item5_function', 'item5_path_specification', 'path');
-        updateItemDisplay('item6_function', 'item6_path_specification', 'path');
-
-        updateItemDisplay('item1_anchor', 'item1_anchor_specification', '');
-        updateItemDisplay('item2_anchor', 'item2_anchor_specification', '');
-        updateItemDisplay('item3_anchor', 'item3_anchor_specification', '');
-        updateItemDisplay('item4_anchor', 'item4_anchor_specification', '');
-        updateItemDisplay('item5_anchor', 'item5_anchor_specification', '');
-        updateItemDisplay('item6_anchor', 'item6_anchor_specification', '');
+        {% for item in items %}
+          {% autoescape false %}
+          {{ item.script }}
+          {% endautoescape %}
+        {% endfor %}
       }
     </script>
   </head>
@@ -98,7 +76,7 @@
     <form method="post" action="/ray/plot">
       {% for item in items %}
         {% autoescape false %}
-        {{ item }}
+        {{ item.specification }}
         {% endautoescape %}
       {% endfor %}
       <input type="submit" value="Plot"></input>

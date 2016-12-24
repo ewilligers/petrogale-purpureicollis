@@ -5,6 +5,8 @@ from math import atan2, cos, degrees, fabs, radians, sin, sqrt
 from os import path
 from webapp2 import RequestHandler, WSGIApplication
 
+NUM_ITEMS = 6
+
 class Size:
     def __init__(self, width, height):
         self.width = width
@@ -187,13 +189,17 @@ class MainPage(RequestHandler):
     def get(self):
         main_template = JINJA_ENVIRONMENT.get_template('templates/ray.html')
         item_template = JINJA_ENVIRONMENT.get_template('templates/item-fragment.html')
+        item_script_template = JINJA_ENVIRONMENT.get_template('templates/item-script-fragment.html')
 
         items = []
         for index in range(1, 7):
             item_template_values = { 'item': { 'number': index, 'display': 'none' } }
             if index == 1:
                 item_template_values['item']['display'] = 'block'
-            items.append(item_template.render(item_template_values))
+            items.append({
+                'specification': item_template.render(item_template_values),
+                'script': item_script_template.render(item_template_values),
+            })
 
         main_template_values = { 'items': items }
         self.response.write(main_template.render(main_template_values))
@@ -201,7 +207,7 @@ class MainPage(RequestHandler):
 
 class PlotPage(RequestHandler):
     def get(self):
-        post(self)
+        self.post()
 
     def post(self):
         plot_template = JINJA_ENVIRONMENT.get_template('templates/plot.svg')
@@ -214,7 +220,7 @@ class PlotPage(RequestHandler):
         container_size = Size(500, 500)
         elements = []
 
-        for index in range(1, 7):
+        for index in range(1, NUM_ITEMS + 1):
             def getParam(name, default):
                 return self.request.get('item{}_{}'.format(index, name), default)
 
