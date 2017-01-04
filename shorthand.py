@@ -14,6 +14,7 @@ LONGHANDS = [
   '<offset-distance>',
   '<offset-path>',
   '<offset-position>',
+  '<offset-rotate>',
   '<offset-rotation>',
   '<path()>',
   '<size>',
@@ -33,6 +34,8 @@ SEPARATORS = [
   'left',
   'right',
   'top',
+  'auto',
+  'reverse',
 ]
 
 ATOMS = LONGHANDS + SEPARATORS
@@ -319,7 +322,7 @@ POSITION_VALUES = [
   'auto',
 ]
 
-ROTATION_VALUES = [
+ROTATE_VALUES = [
   '0deg auto',
   '0deg',
   'auto 0deg',
@@ -350,7 +353,8 @@ LONGHAND_EXPANSIONS = {
   '<offset-distance>': DISTANCE_VALUES,
   '<offset-path>': PATH_VALUES,
   '<offset-position>': POSITION_VALUES,
-  '<offset-rotation>': ROTATION_VALUES,
+  '<offset-rotate>': ROTATE_VALUES,
+  '<offset-rotation>': ROTATE_VALUES,
   '<path()>': PATH_VALUES,
   '<size>': SIZE_VALUES,
   '<url>': URL_VALUES,
