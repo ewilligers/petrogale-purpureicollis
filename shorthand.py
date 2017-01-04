@@ -17,7 +17,8 @@ LONGHANDS = [
   '<offset-rotation>',
   '<path()>',
   '<size>',
-  '<url>'
+  '<url>',
+  '<length-percentage>'
 ]
 
 SEPARATORS = [
@@ -26,7 +27,12 @@ SEPARATORS = [
   '/',
   'contain',
   'none',
-  'ray'
+  'ray',
+  'bottom',
+  'center',
+  'left',
+  'right',
+  'top',
 ]
 
 ATOMS = LONGHANDS + SEPARATORS
@@ -332,6 +338,10 @@ URL_VALUES = [
   "url('https://www.example.com/shape#element')"
 ]
 
+LENGTH_PERCENTAGE_VALUES = [
+  '0%',
+]
+
 LONGHAND_EXPANSIONS = {
   '<angle>': ANGLE_VALUES,
   '<basic-shape>': SHAPE_VALUES,
@@ -343,7 +353,8 @@ LONGHAND_EXPANSIONS = {
   '<offset-rotation>': ROTATION_VALUES,
   '<path()>': PATH_VALUES,
   '<size>': SIZE_VALUES,
-  '<url>': URL_VALUES
+  '<url>': URL_VALUES,
+  '<length-percentage>': LENGTH_PERCENTAGE_VALUES,
 }
 
 SEPARATOR_EXPANSIONS = dict((separator, [separator]) for separator in SEPARATORS)
