@@ -44,23 +44,29 @@
           return percentage;
         }
 
-        function locate(percentage, xId, yId) {
+        function locate(percentage) {
           // https://drafts.fxtf.org/motion-1/#calculating-the-computed-distance-along-a-path
           var distance = length * clamp(percentage) / 100;
           return element.getPointAtLength(distance);
         }
 
         var epsilon = 0.001;
-        var percentage = clamp(Number(document.getElementById(item + '_distance').value.trim()));
+        var percentage = clamp(parseFloat(document.getElementById(item + '_distance').value));
 
-        var previous = locate(percentage - epsilon, item + '_x0', item + '_y0');
-        var current = locate(percentage, item + '_x1', item + '_y1');
-        var next = locate(percentage + epsilon, item + '_x2', item + '_y2');
-
+        var current = locate(percentage);
         document.getElementById(item + '_path_x').value = current.x;
         document.getElementById(item + '_path_y').value = current.y;
-        document.getElementById(item + '_path_dx').value = next.x - previous.x;
-        document.getElementById(item + '_path_dy').value = next.y - previous.y;
+
+        var next = locate(percentage + epsilon);
+        var dx = next.x - current.x;
+        var dy = next.y - current.y;
+        if (dx === 0 && dy === 0) {
+          var previous = locate(percentage - epsilon);
+          dx = current.x - previous.x;
+          dy = current.y - previous.y;
+        }
+        document.getElementById(item + '_path_dx').value = dx;
+        document.getElementById(item + '_path_dy').value = dy;
       }
 
       window.onload = function() {
