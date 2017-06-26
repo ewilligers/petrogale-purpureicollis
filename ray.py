@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from jinja2 import Environment, FileSystemLoader
-from math import atan2, cos, degrees, fabs, radians, sin, sqrt
+from math import atan2, cos, degrees, fabs, pi, radians, sin, sqrt
 from os import path
 from webapp2 import RequestHandler, WSGIApplication
 
@@ -15,11 +15,17 @@ class Size:
         return 'Size({}, {})'.format(self.width, self.height)
 
 class Point:
-    def __init__(self, x, y):
+    def __init__(self, x, y, r = None):
         self.x = x
         self.y = y
+        self.r = r
+        if self.r is None:
+            self.r = sqrt(x*x + y*y)
     def __str__(self):
         return 'Point({}, {})'.format(self.x, self.y)
+
+def triangle_area(p1, p2, p3):
+    return fabs(p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)) / 2
 
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
