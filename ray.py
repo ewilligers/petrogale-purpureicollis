@@ -27,6 +27,15 @@ class Point:
 def triangle_area(p1, p2, p3):
     return fabs(p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)) / 2
 
+def encloses_origin(p1, p2, p3):
+    def origin_right(begin, end):
+        return (end.y * (begin.x - end.x) - end.x * (begin.y - end.y)) < 0
+
+    d12 = origin_right(p1, p2)
+    d23 = origin_right(p2, p3)
+    d31 = origin_right(p3, p1)
+    return d12 == d23 and d23 == d31
+
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
 
