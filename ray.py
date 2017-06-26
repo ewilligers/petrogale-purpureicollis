@@ -46,31 +46,6 @@ def segment_area(p1, p2):
     return (theta - sin(theta)) / 2
 
 # Identifies the points of intersection between
-# the interval q1-q2 and the unit circle.
-def intersection_with_unit_circle(q1, q2):
-    # Interval: x = t xd + xs, y = t yd + ys, -1 <= t <= 1
-    xd = (q2.x - q1.x) / 2.0
-    xs = (q1.x + q2.x) / 2.0
-    yd = (q2.y - q1.y) / 2.0
-    ys = (q1.y + q2.y) / 2.0
-
-    # Circle: x**2 + y**2 = 1**2
-    # (t xd + xs)**2 + (t yd + ys)**2 - 1 = 0
-
-    a = xd**2 + yd**2
-    b = 2 * (xd * xs + yd * ys)
-    c = xs**2 + ys**2 - 1
-    discriminant = b**2 - 4 * a * c
-    if discriminant < 0 or a == 0:
-        solutions = []
-    elif discriminant == 0:
-        solutions = [-b / (2.0 * a)]
-    else:
-        solutions = [(-b + sqrt(discriminant)) / (2.0 * a), (-b - sqrt(discriminant)) / (2.0 * a)]
-
-    return [Point(t * xd + xs, t * yd + ys, 1) for t in solutions if fabs(t) < 1]
-
-# Identifies the points of intersection between
 # the open interval q1-q2 and the unit circle.
 def intersection_with_unit_circle(q1, q2):
     if q1.r <= 1 and q2.r <= 1:
@@ -117,6 +92,39 @@ def intersection_with_unit_circle(q1, q2):
         solutions = [(-b + sqrt(discriminant)) / (2.0 * a), (-b - sqrt(discriminant)) / (2.0 * a)]
 
     return [Point(t * xd + xs, t * yd + ys, 1) for t in solutions if fabs(t) < 1]
+
+# determine the area of intersection between the triangle and the unit circle.
+def area_inside_unit_circle(p1, p2, p3):
+    external = 0
+    for [q1, q2, q3] in [[p1, p2, p3], [p2, p3, p1], [p3, p1, p2]]:
+        if q3.r > 1:
+            external += 1
+        intersections = intersection_with_unit_circle(q1, q2)
+        if len(intersections) == 0:
+            continue
+
+        points = [q1] + intersections + [q2]
+        area = 0
+        for index in range(1, len(points)):
+            area += area_inside_unit_circle(points[index - 1], points[index], q3)
+        return area
+
+    if external == 0:
+        return triangle_area(p1, p2, p3)
+    elif external == 1:
+        if p2.r < p1.r:
+            [p1, p2] = [p2, p1]
+        if p3.r < p2.r:
+            [p2, p3] = [p3, p2]
+        if p2.r < p1.r:
+            [p1, p2] = [p2, p1]
+        return segment_area(p1, p2)
+    elif external == 2:
+        return 0
+    elif encloses_origin(p1, p2, p3):
+        return pi
+    else:
+        return 0
 
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
