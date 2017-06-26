@@ -47,6 +47,28 @@ def least_upper_bound(intervals):
     return min([interval.upper_bound for interval in intervals])
 
 
+# Find the distance to the container edge, in the direction given
+# by angle. The offset-position is (distLeft, distTop), and the
+#  container size is (distLeft + distRight, distTop + distBottom).
+def distance_to_sides(distLeft, distTop, distRight, distBottom, angle):
+    sn = sin(angle)
+    cs = cos(angle)
+    if sn >= 0:
+        distHorizontal = distRight
+    else:
+        distHorizontal = distLeft
+        sn = -sn
+
+    if cs >= 0:
+        distVertical = distTop
+    else:
+        distVertical = distBottom
+        cs = -cs
+
+    if distVertical * sn <= distHorizontal * cs:
+        return distVertical / cs
+    return distHorizontal / sn
+
 class RayPath:
     def __init__(self, angle, size = None, contain = False):
         if size not in [
@@ -54,6 +76,7 @@ class RayPath:
             'closest-corner',
             'farthest-side',
             'farthest-corner',
+            'sides',
         ]:
             size = 'closest-side'
 
@@ -135,6 +158,11 @@ class Element:
         y1 = fabs(self.offset_position.y)
         x2 = fabs(self.container_size.width - self.offset_position.x)
         y2 = fabs(self.container_size.height - self.offset_position.y)
+
+        if self.offset_path.size == 'sides':
+            if self.offset_position.x <= 0 or self.offset_position.y <= 0 or self.offset_position.x >= self.container_size.width or self.offset_position.y >= self.container_size.height:
+                return 0
+            return distance_to_sides(x1, y1, x2, y2, radians(self.offset_path.angle))
 
         if self.offset_path.size == 'closest-side' or self.offset_path.size == 'closest-corner':
             x = min(x1, x2)
