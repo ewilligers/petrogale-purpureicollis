@@ -45,6 +45,79 @@ def segment_area(p1, p2):
     theta = fabs(atan2(y, x))
     return (theta - sin(theta)) / 2
 
+# Identifies the points of intersection between
+# the interval q1-q2 and the unit circle.
+def intersection_with_unit_circle(q1, q2):
+    # Interval: x = t xd + xs, y = t yd + ys, -1 <= t <= 1
+    xd = (q2.x - q1.x) / 2.0
+    xs = (q1.x + q2.x) / 2.0
+    yd = (q2.y - q1.y) / 2.0
+    ys = (q1.y + q2.y) / 2.0
+
+    # Circle: x**2 + y**2 = 1**2
+    # (t xd + xs)**2 + (t yd + ys)**2 - 1 = 0
+
+    a = xd**2 + yd**2
+    b = 2 * (xd * xs + yd * ys)
+    c = xs**2 + ys**2 - 1
+    discriminant = b**2 - 4 * a * c
+    if discriminant < 0 or a == 0:
+        solutions = []
+    elif discriminant == 0:
+        solutions = [-b / (2.0 * a)]
+    else:
+        solutions = [(-b + sqrt(discriminant)) / (2.0 * a), (-b - sqrt(discriminant)) / (2.0 * a)]
+
+    return [Point(t * xd + xs, t * yd + ys, 1) for t in solutions if fabs(t) < 1]
+
+# Identifies the points of intersection between
+# the open interval q1-q2 and the unit circle.
+def intersection_with_unit_circle(q1, q2):
+    if q1.r <= 1 and q2.r <= 1:
+        return []
+
+    if q2.r == 1:
+        [q1, q2] = [q2, q1]
+
+    if q1.r == 1:
+        # Interval: x = t xd + q1.x, y = t yd + q1.y, 0 <= t <= 1
+        xd = q2.x - q1.x
+        yd = q2.y - q1.y
+
+        # Circle: x**2 + y**2 = 1**2 = q1.x**2 + q1.y**2
+        # (t xd + q1.x)**2 + (t yd + q1.y)**2 - q1.x**2 - q1.y**2 = 0
+        # (xd**2 + yd**2) * t**2 + 2 * (xd * q1.x + yd * q1.y) * t = 0
+        a = xd**2 + yd**2
+        b = 2.0 * (xd * q1.x + yd * q1.y)
+        if a == 0:
+            return []
+        t = -b / a
+        if t <= 0 or t >= 1:
+            return []
+        return [Point(t * xd + q1.x, t * yd + q1.y, 1)]
+
+    # Interval: x = t xd + xs, y = t yd + ys, -1 <= t <= 1
+    xd = (q2.x - q1.x) / 2.0
+    xs = (q1.x + q2.x) / 2.0
+    yd = (q2.y - q1.y) / 2.0
+    ys = (q1.y + q2.y) / 2.0
+
+    # Circle: x**2 + y**2 = 1**2
+    # (t xd + xs)**2 + (t yd + ys)**2 - 1 = 0
+
+    a = xd**2 + yd**2
+    b = 2 * (xd * xs + yd * ys)
+    c = xs**2 + ys**2 - 1
+    discriminant = b**2 - 4 * a * c
+    if discriminant < 0 or a == 0:
+        solutions = []
+    elif discriminant == 0:
+        solutions = [-b / (2.0 * a)]
+    else:
+        solutions = [(-b + sqrt(discriminant)) / (2.0 * a), (-b - sqrt(discriminant)) / (2.0 * a)]
+
+    return [Point(t * xd + xs, t * yd + ys, 1) for t in solutions if fabs(t) < 1]
+
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
 
