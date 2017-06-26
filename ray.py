@@ -36,6 +36,15 @@ def encloses_origin(p1, p2, p3):
     d31 = origin_right(p3, p1)
     return d12 == d23 and d23 == d31
 
+# Given two points on the unit circle, returns
+# the area of the circular segment between the
+# arc and the chord.
+def segment_area(p1, p2):
+    x = p1.x * p2.x + p1.y * p2.y
+    y = p1.x * p2.y - p1.y * p2.x
+    theta = fabs(atan2(y, x))
+    return (theta - sin(theta)) / 2
+
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
 
