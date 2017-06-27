@@ -126,6 +126,25 @@ def area_inside_unit_circle(p1, p2, p3):
     else:
         return 0
 
+# Search for x such that the first derivative of
+# function becomes 0. Use x0 as the initial guess.
+def newton(function, x0):
+    EPSILON = 1e-6
+    x = x0
+
+    for _ in range(10):
+        fp = function(x + EPSILON)
+        f = function(x)
+        fm = function(x - EPSILON)
+
+        fd = (fp - fm) / (2 * EPSILON)
+        fdd = (fp + fm - 2 * f) / (EPSILON**2)
+        if fabs(fd) < EPSILON or fabs(fdd) < EPSILON:
+            return x
+        x = x - fd / fdd
+
+    return x
+
 def translate(dx, dy):
     return lambda point: Point(point.x + dx, point.y + dy)
 
