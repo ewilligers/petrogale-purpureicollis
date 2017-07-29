@@ -194,7 +194,7 @@ def distance_to_sides(distLeft, distTop, distRight, distBottom, angle):
     return distHorizontal / sn
 
 class RayPath:
-    def __init__(self, angle, size = None, contain = False):
+    def __init__(self, angle, size, contain):
         if size not in [
             'closest-side',
             'closest-corner',
@@ -308,27 +308,59 @@ class Element:
         if not self.offset_path.contain:
             return computed_offset
 
-        def compute_bounds(vertex):
-            d2 = radius**2 - vertex.y**2
-            if d2 <= 0:
-                return Interval(-vertex.x, -vertex.x)
-            else:
-                d = sqrt(d2)
-                return Interval(-vertex.x - d, -vertex.x + d)
-
+        epsilon = 0.0001
         vertices = map(rotate(90 - self.offset_path.angle), self.v)
-        bounds = map(compute_bounds, vertices)
-        low = greatest_lower_bound(bounds)
-        high = least_upper_bound(bounds)
+        vertices.sort(key=lambda p: -fabs(p.y))
 
-        if low >= high:
-            return (low + high) / 2.
-        elif computed_offset < low:
-            return low
-        elif computed_offset > high:
-            return high
-        else:
-            return computed_offset
+        # Determine the offset interval such that all vertices lie within the path.
+        intervals = []
+        for v in vertices:
+            # We require (offset + x)**2 + y**2 <= radius**2
+            discriminant = radius * radius - v.y * v.y
+            if discriminant < 0:
+                break # no solution
+
+            intervals.append(Interval(-v.x - sqrt(discriminant), -v.x + sqrt(discriminant)))
+
+        if len(intervals) == len(vertices):
+            lower_bound = greatest_lower_bound(intervals)
+            upper_bound = least_upper_bound(intervals)
+            if lower_bound <= upper_bound:
+                return max(lower_bound, min(upper_bound, computed_offset))
+
+        # The path length will need to be increased.
+        # We find the smallest path length such that an offset exists for all vertices to lie within the path.
+
+        # v[0] is furthest from the x-axis.
+        radius = fabs(vertices[0].y)
+        offset = -vertices[0].x
+
+        for i in range(3):
+            for j in range(i+1, 4):
+                # Find the path length such that, for some offset, vertices[i] and vertices[j] both lie within the path.
+                xi = vertices[i].x
+                yi = vertices[i].y
+                xj = vertices[j].x
+                yj = vertices[j].y
+                xd = xi - xj
+
+                if xd * xd + yj * yj <= yi * yi + epsilon:
+                    # Any path that encloses vertices[i] would also enclose vertices[j].
+                    continue
+
+                # If both lie on the path,
+                # (offset + xi)**2 + yi**2 = (offset + xj)**2 + yj**2 = (path length)**2
+                # 2 * xi * offset + xi**2 + yi**2 = 2 * xj * offset + xj**2 + yj**2
+
+                candidate_offset = (xj * xj + yj * yj - xi * xi - yi * yi) / 2 / xd
+                xi += candidate_offset
+                xj += candidate_offset
+                candidate_radius = sqrt(xi * xi + yi * yi)  # == sqrt(xj * xj + yj * yj)
+                if radius < candidate_radius:
+                    radius = candidate_radius
+                    offset = candidate_offset
+
+        return offset
 
 
 JINJA_ENVIRONMENT = Environment(
