@@ -4,6 +4,13 @@ threadsafe: true
 
 # [START handlers]
 handlers:
+- url: /ray/position/record/.*
+  script: position.app
+  login: admin
+
+- url: /ray/position/search/.*
+  script: position.app
+
 - url: /ray/shorthand/.*
   script: shorthand.app
 
@@ -13,6 +20,10 @@ handlers:
 - url: /favicon.ico
   static_files: favicon.ico
   upload: favicon.ico
+
+- url: /position.js
+  static_files: resources/position.js
+  upload: resources/position.js
 # [END handlers]
 
 # [START libraries]

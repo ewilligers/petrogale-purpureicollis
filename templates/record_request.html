@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>&lt;position&gt;</title>
+    <style>
+      .error { color: red; }
+    </style>
+    <script src="/position.js"></script>
+  </head>
+  <body>
+    <br>
+    <div class="error">{{ error }}</div>
+    <br>
+    <form method="post" action="/ray/position/record/">
+      <table>
+        <tr>
+          <td><label for="browser">Browser:</label></td>
+          <td><input type="text" id="browser" name="browser" required></td>
+        </tr>
+        <tr>
+          <td><label for="version">Browser Version:</label></td>
+          <td><input type="number" id="version" name="version" required></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input id="submit" type="submit" value="Record"></input></td>
+        </tr>
+      </table>
+    </form>
+    <script>
+      'use strict';
+
+      window.onload = function() {
+        const table = document.querySelector('form table');
+        const submit = document.getElementById('submit');
+        for (var contextIndex = 0; contextIndex < contexts.length; ++contextIndex) {
+          const context = contexts[contextIndex];
+          const splitContext = context.split(':');
+          const property = splitContext[0];
+          const valueTemplate = splitContext[1].trim();
+
+          const prefixLength = valueTemplate.indexOf('<position>');
+          const prefix = valueTemplate.substring(0, prefixLength);
+
+          const suffix = valueTemplate.substring(valueTemplate.indexOf('<position>') + '<position>'.length);
+          const suffixLength = suffix.length;
+
+          for (var valueIndex = 0; valueIndex < values.length; ++valueIndex) {
+            const value = values[valueIndex];
+            const assigned = valueTemplate.replace('<position>', value);
+            const target = document.createElement('div');
+            target.style[property] = assigned;
+            const serialized = target.style[property];
+
+            const tr = document.createElement('tr');
+            table.appendChild(tr);
+
+            const firstTd = document.createElement('td');
+            firstTd.textContent = context + ' / ' + value;
+            tr.appendChild(firstTd);
+
+            const secondTd = document.createElement('td');
+            tr.appendChild(secondTd);
+
+            let extracted = serialized;
+            if (serialized !== '') {
+              if (serialized.substring(0, prefixLength) === prefix && serialized.substring(serialized.length - suffixLength) === suffix) {
+                const result = document.createElement('input');
+                result.setAttribute('type', 'text');
+                result.setAttribute('name', resultName(contextIndex, valueIndex));
+                result.readOnly = true;
+                result.setAttribute('value', serialized.substring(prefixLength, serialized.length - suffixLength));
+                secondTd.appendChild(result);
+              } else {
+                tr.classList.add('error');
+                submit.disabled = true;
+              }
+            }
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

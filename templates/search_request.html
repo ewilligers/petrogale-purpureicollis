@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>&lt;position&gt;</title>
+    <script src="/position.js"></script>
+    <style>
+      #report {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="report" rows="180" disabled></textarea>
+    <script>
+      'use strict';
+
+      window.onload = function() {
+        const submissions = {{ submissions }};
+        for (var submissionIndex = 0; submissionIndex < submissions.length; ++submissionIndex) {
+          const submission = submissions[submissionIndex];
+          submission.results = {};
+          for (var measurementIndex = 0; measurementIndex < submission.measurements.length; ++measurementIndex) {
+            const measurement = submission.measurements[measurementIndex];
+            submission.results[measurement.context] = measurement.serialization;
+          }
+        }
+
+
+        let markdownText = '';
+        for (var valueIndex = 0; valueIndex < values.length; ++valueIndex) {
+          markdownText += '| ' + values[valueIndex] + ' | ';
+          for (var submissionIndex = 0; submissionIndex < submissions.length; ++submissionIndex)
+            markdownText += submissions[submissionIndex].browser + ' ' + submissions[submissionIndex].version + ' | ';
+          markdownText += '\n';
+
+          markdownText += '| --- | ';
+          for (var submissionIndex = 0; submissionIndex < submissions.length; ++submissionIndex)
+            markdownText += '--- | ';
+          markdownText += '\n';
+
+          for (var contextIndex = 0; contextIndex < contexts.length; ++contextIndex) {
+            markdownText += '| ' + contexts[contextIndex] + ' | ';
+            for (var submissionIndex = 0; submissionIndex < submissions.length; ++submissionIndex)
+              markdownText += submissions[submissionIndex].results[resultName(contextIndex, valueIndex)] + ' | ';
+            markdownText += '\n';
+          }
+          markdownText += '\n';
+        }
+
+        const report = document.getElementById('report');
+
+        report.textContent = markdownText;
+        console.log(markdownText);
+      };
+    </script>
+  </body>
+</html>

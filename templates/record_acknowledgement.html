@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>&lt;position&gt;</title>
+    <script src="/position.js"></script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td><label for="browser">Browser:</label></td>
+        <td><input type="text" id="browser" name="browser" readonly value="{{ browser }}"></td>
+      </tr>
+      <tr>
+        <td><label for="version">Browser Version:</label></td>
+        <td><input type="text" id="version" name="version" readonly value="{{ version }}"></td>
+      </tr>
+      <tr>
+        <td><label for="submission_key">Browser Version:</label></td>
+        <td><input type="text" id="submission_key" name="submission_key" readonly value="{{ submission_key }}"></td>
+      </tr>
+    </table>
+  </body>
+</html>
