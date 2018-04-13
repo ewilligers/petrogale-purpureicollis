@@ -14,6 +14,9 @@ handlers:
 - url: /ray/shorthand/.*
   script: shorthand.app
 
+- url: /ray/serialization/.*
+  script: serialization.app
+
 - url: /ray/.*
   script: ray.app
 

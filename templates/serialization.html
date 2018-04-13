@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>serialization</title>
+    <style>
+      #error { color: red; }
+      #container { visibility: hidden; }
+    </style>
+    <script>
+      window.onload = function() {
+        const error = document.getElementById('error');
+        if (error.textContent === '')
+          error.style.display = 'none';
+
+        const property = document.getElementById('property');
+        const assigned = document.getElementById('assigned');
+        const serialized = document.getElementById('serialized');
+        const computed = document.getElementById('computed');
+        const submit = document.getElementById('submit');
+
+        function update() {
+          const propertyName = property.value.trim();
+          if (propertyName === '') {
+            serialized.value = '';
+            computed.value = '';
+            submit.disabled = true;
+            return;
+          }
+          const target = document.createElement('div');
+          container.appendChild(target);
+          target.style[propertyName] = assigned.value;
+          serialized.value = target.style[propertyName];
+          computed.value = getComputedStyle(target)[propertyName];
+          submit.disabled = false;
+          container.removeChild(target);
+        }
+
+        update();
+        property.oninput = update;
+        assigned.oninput = update;
+      }
+    </script>
+  </head>
+  <body>
+    <form method="POST" action="/ray/serialization/">
+      <table>
+        <tr>
+          <td><label for="property">Property:</label></td>
+          <td><input type="text" id="property" name="property" value="{{ property }}"></input></td>
+        </tr>
+        <tr>
+          <td><label for="assigned">Value:</label></td>
+          <td><input type="text" id="assigned" name="assigned" value="{{ assigned }}"></input></td>
+        </tr>
+        <tr>
+          <td><label for="serialized">Serialized:</label></td>
+          <td><input type="text" id="serialized" name="serialized" readonly value="{{ serialized }}"></input></td>
+        </tr>
+        <tr>
+          <td><label for="computed">Computed:</label></td>
+          <td><input type="text" id="computed" name="computed" readonly value="{{ computed }}"></input></td>
+        </tr>
+        <input type="hidden" id="divisor" name="divisor" value="{{ divisor }}"></input>
+        <input type="hidden" id="quotient" name="quotient" value="{{ quotient }}"></input>
+        <input type="hidden" id="useragent" name="useragent" value="{{ useragent }}"></input>
+      </table>
+      <input id="submit" type="submit" value="Record"></input>
+    </form>
+    <section>
+      <br>
+      <div id="error">{{ error }}</div>
+      <br>
+      <div>
+        {% autoescape false %}
+        {{ response }}
+        {% endautoescape %}
+      </div>
+      <div id="container">
+      </div>
+    </section>
+  </body>
+</html>
+{% endautoescape %}
