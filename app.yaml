@@ -27,6 +27,14 @@ handlers:
 - url: /position.js
   static_files: resources/position.js
   upload: resources/position.js
+
+- url: /static/(.*\.(html|css|js))$
+  static_files: static/\1
+  upload: static/.*\.(html|css|js)$
+
+- url: /resources/(.*\.(html|css|js))$
+  static_files: static/resources/\1
+  upload: static/resources/.*\.(html|css|js)$
 # [END handlers]
 
 # [START libraries]
