@@ -20,6 +20,9 @@ handlers:
 - url: /ray/.*
   script: ray.app
 
+- url: /ray/upload/.*
+  script: upload.app
+
 - url: /favicon.ico
   static_files: favicon.ico
   upload: favicon.ico
