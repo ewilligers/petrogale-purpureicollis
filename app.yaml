@@ -32,6 +32,10 @@ handlers:
   static_files: static/\1
   upload: static/.*\.(html|css|js)$
 
+- url: /css/support/(.*\.(html|css|js))$
+  static_files: static/css/support/\1
+  upload: static/css/support/.*\.(html|css|js)$
+
 - url: /resources/(.*\.(html|css|js))$
   static_files: static/resources/\1
   upload: static/resources/.*\.(html|css|js)$
