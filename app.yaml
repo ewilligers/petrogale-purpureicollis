@@ -28,9 +28,9 @@ handlers:
   static_files: resources/position.js
   upload: resources/position.js
 
-- url: /static/(.*\.(html|css|js))$
+- url: /static/(.*\.(html|css|js|svg))$
   static_files: static/\1
-  upload: static/.*\.(html|css|js)$
+  upload: static/.*\.(html|css|js|svg)$
 
 - url: /css/support/(.*\.(html|css|js))$
   static_files: static/css/support/\1
