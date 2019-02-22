@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="manifest" href="/manifest.webmanifest">
+  </head>
+  <body>
+    <div id="name"></div>
+    <div id="description"></div>
+    <div id="link"></div>
+    <script>
+      'use strict';
+      window.addEventListener('load', () => {
+        var parsedUrl = new URL(window.location);
+        console.log('Title shared: ' + parsedUrl.searchParams.get('name2'));
+        console.log('Text shared: ' + parsedUrl.searchParams.get('description'));
+        console.log('URL shared: ' + parsedUrl.searchParams.get('link'));
+
+        document.getElementById('name').textContent = parsedUrl.searchParams.get('name2');
+        document.getElementById('description').textContent = parsedUrl.searchParams.get('description');
+        document.getElementById('link').textContent = parsedUrl.searchParams.get('link');
+        console.log(parsedUrl.searchParams.get('name'));
+        console.log(parsedUrl.searchParams.get('name2'));
+        console.log(parsedUrl.searchParams.get('name3'));
+      });
+    </script>
+  </body>
+</html>

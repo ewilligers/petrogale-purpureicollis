@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<style>
+  .project img{
+    width: 100%;
+    max-width: 400px;
+    align-self: center;
+    justify-self: center;
+  }
+  .showcase_wrap{
+    max-width: 600px;
+    position: relative;
+  }
+  .project{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: grid;
+  }
+</style>
+
+<section>
+  <div class="showcase_wrap">
+    <!--
+    <div class="project">
+      <img src="https://images.unsplash.com/photo-1543363951-d1feb17b7338?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60">
+    </div>
+  -->
+    <div class="project_bg">
+      <svg viewBox="0 0 400 400" id="mysvg" xmlns="http://www.w3.org/2000/svg">
+        <path d="M374.3,204.3c17.5,97.9-96.3,127.9-188.5,165.3C91.7,407.7,23.9,292.8,23.9,193.4c0-135.5,91.1-174,190.5-170.2C281.9,25.8,362.6,138.5,374.3,204.3Z" fill="#e14444">
+          <animate
+            id="anime"
+            dur="2s"
+            begin="indefinite"
+            repeatCount="indefinite"
+            attributeName="d"
+            values="M374.3,204.3c17.5,97.9-96.3,127.9-188.5,165.3C91.7,407.7,23.9,292.8,23.9,193.4c0-135.5,91.1-174,190.5-170.2C281.9,25.8,362.6,138.5,374.3,204.3Z;M374.3,214.3c17.5,97.9-38.8,105.4-130.9,142.8C149.3,395.2,26.7,268.3,26.7,168.8c0-135.5,111.7-119,211-115.2C305.3,56.2,362.6,148.5,374.3,214.3Z;M374.3,204.3c17.5,97.9-96.3,127.9-188.5,165.3C91.7,407.7,23.9,292.8,23.9,193.4c0-135.5,91.1-174,190.5-170.2C281.9,25.8,362.6,138.5,374.3,204.3Z;" />
+        </path>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<script>
+  var svgLocation = document.getElementById("mysvg").getBoundingClientRect();
+  var offsetToTriggerAnimation = svgLocation.y + svgLocation.height;
+
+  var pending = null;
+
+  function scrollAnimTriggerCheck(evt)
+  {
+    var viewBottom = window.scrollY + window.innerHeight;
+    if (viewBottom > offsetToTriggerAnimation) {
+      document.getElementById("anime").beginElement();
+    }else{
+      // document.getElementById("anime").endElement();
+    }
+  }
+  document.addEventListener("scroll", scrollAnimTriggerCheck);
+</script>

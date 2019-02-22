@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <style>
+    #errorLog { color: red; }
+
+    :nth-child(2n+2 /*of input*/) {
+      color: blue;
+      font-size: larger;
+    }
+
+  </style>
+</head>
+<body>
+    <h1 id="errorLog">message</h1>
+  <form target="_blank">
+    <input type="text" id="name" name="name" value="Sample name">
+    <input type="text" id="description" name="description" value="Sample description">
+    <input type="text" id="link" name="link" value="Sample link">
+    <input type="text" id="unused" name="unused" value="Sample unused">
+
+    <input type="file" id="shared_files" name="shared_files" multiple>
+
+    <input type="submit" id="submit" name="submit">
+  </form>
+  <script>
+    'use strict';
+    document.getElementById('submit').addEventListener('click', () => {
+      const title = document.getElementById('name').value;
+      const text = document.getElementById('description').value;
+      const url = document.getElementById('link').value;
+      const files = document.getElementById('shared_files').files;
+      const errorLog = document.getElementById('errorLog');
+
+      let data = {};
+      data.title = title;
+      data.text = text;
+      data.url = url;
+      if (files.length > 0)
+        data.files = files;
+
+      try {
+        errorLog.textContent = 'Sharing';
+        navigator.share(data).then(() => {
+          errorLog.textContent = 'Successful share';
+        }).catch((err) => {
+          console.log('Unsuccessful share');
+          console.log('Share failed: ' + err.message);
+          errorLog.textContent = 'Share failed: ' + err.message;
+        });
+      } catch (err) {
+        console.log('Very unsuccessful share');
+        console.log('Share threw: ' + err.message);
+        errorLog.textContent = 'Share threw: ' + err.message;
+      }
+
+      return false;
+    });
+
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+
+  </script>
+</body>
+</html>

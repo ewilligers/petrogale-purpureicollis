@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<body>
+<section id="active">
+<svg width="400" height="400">
+  <rect id="red" x="0" y="0" width="400" height="200" onwheel="wheel1()" fill="red" />
+  <rect id="green" x="0" y="200" width="400" height="200" onmousewheel="wheel2()" fill="green" />
+</svg>
+<div id="yellow"></div>
+<div id="blue"></div>
+</section>
+<style>
+  #active div {
+    width: 400px;
+    height: 200px;
+  }
+  #yellow {
+    background-color: yellow;
+  }
+  #blue {
+    background-color: blue;
+  }
+</style>
+<section id="report">
+</section>
+<script>
+  function log(message) {
+    const div = document.createElement('div');
+    div.textContent = message;
+    report.appendChild(div);
+  }
+
+  function wheel1() {
+    log('wheel1');
+  }
+
+  function wheel2() {
+    log('wheel2');
+  }
+
+  function wheel3(event) {
+    log('wheel3 ' + event.type);
+  }
+
+  function wheel4(event) {
+    log('wheel4 ' + event.type);
+  }
+
+  function wheel5(event) {
+    log('wheel5 ' + event.type);
+  }
+
+  function wheel6(event) {
+    log('wheel6 ' + event.type);
+  }
+
+  red.addEventListener('wheel', wheel3);
+  green.addEventListener('mousewheel', wheel4);
+
+  yellow.addEventListener('wheel', wheel5);
+  blue.addEventListener('mousewheel', wheel6);
+</script>
+</body>

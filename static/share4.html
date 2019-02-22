@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    #error { color: red; }
+  </style>
+</head>
+<body>
+  <form method="POST" action="/share/">
+    <table>
+      <tr>
+        <td><label for="shared_title">Title:</label></td>
+        <td><input id="shared_title" name="shared_title" value="Example Title"></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_text">Text:</label></td>
+        <td><input id="shared_text" name="shared_text" value="Example text"></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_url">URL:</label></td>
+        <td><input id="shared_url" name="shared_url" value="https://example.com/a?b=c"></input></td>
+      </tr>
+      <tr>
+        <td><label for="shared_file">File(s):</label></td>
+        <td><input id="shared_file" name="shared_file" type="file" multiple></input></td>
+      </tr>
+      <tr>
+        <td><label for="message">Message:</label></td>
+        <td><input id="message" name="message" value="Example Message"></input></td>
+      </tr>
+    </table>
+    <input id="proceed" type="button" value="Share"></input>
+  </form>
+  <div id="error"></div>
+  <script>
+    'use strict';
+    window.onload = () => {
+      const error = document.getElementById('error');
+
+      document.querySelector('#proceed').onclick = () => {
+        const title = document.getElementById('shared_title').value;
+        const text = document.getElementById('shared_text').value;
+        const url = document.getElementById('shared_url').value;
+        const files = document.getElementById('shared_file').files;
+        const message = document.getElementById('message').value;
+
+        let data = {};
+        let options = {};
+        if (title !== '') {
+          data.title = title;
+        }
+        if (text !== '') {
+          data.text = text;
+        }
+        if (url !== '') {
+          data.url = url;
+        }
+        if (files.length > 0) {
+          // console.log('We are sharing ' + files.length + ' files.');
+          data.files = files;
+        } else {
+          // console.log('No files are being shared.');
+        }
+        if (message !== '') {
+          options.message = message;
+        } else {
+          options.message = 'share4.html no message';
+        }
+
+        error.textContent = 'Attempting share';
+
+        if (!navigator.share) {
+          error.textContent = 'navigator.share is not available';
+          return false;
+        }
+        try {
+          navigator.share(data, options).then(() => {
+            // console.log('Successful share');
+            error.textContent = 'Successful share';
+          }).catch((err) => {
+            error.textContent = 'Share failed: ' + err.message;
+            console.log('Unsuccessful share');
+          });
+        } catch (err) {
+          error.textContent = 'Share threw: ' + err.message;
+        }
+
+        return false;
+      };
+    };
+  </script>
+</body>
+</html>

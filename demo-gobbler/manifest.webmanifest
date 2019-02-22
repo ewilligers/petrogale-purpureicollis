@@ -1,0 +1,38 @@
+{
+  "name": "Gobbler",
+  "short_name": "Gobbler",
+
+  "description": "Demo for Web Share Target",
+  "start_url": "http://localhost:9879/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./images/icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./images/icons/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+
+  "share_target": {
+    "action": "http://localhost:9879/aggregate.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link",
+      "files": [
+        {
+          "name": "everything",
+          "accept": ["*/*"]
+        }
+      ]
+    }
+  }
+}
